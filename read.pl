@@ -6,19 +6,25 @@ use warnings;
 my $DATA_DIR = '.';
 my $LOG_FILE = 'time_log';
 
+# Config keys
+my $CK_LOG_PATH = "log_file";
+my $CK_DATA_DIR = "data_dir";
+
 # Local data
-my $LOG_FILE_PATH;
 my @TIME_DATA;
-my $LAST_PROJECT;
-my $LAST_TIMESTAMP;
+my %CONFIG;
 
 sub initData {
-    $LOG_FILE_PATH = $DATA_DIR . '/' . $LOG_FILE;
+    die "Data dir don't exists: $DATA_DIR\n" unless -d $DATA_DIR;
+    my $logFilePath = $DATA_DIR . '/' . $LOG_FILE;
+    die "Log file don't exists: $logFilePath\n" unless -e $logFilePath;
+    $CONFIG{$CK_LOG_PATH} = $logFilePath;
 }
 
 sub readLog {
-    open FILE, $LOG_FILE_PATH or
-        die "Failed to open file $LOG_FILE_PATH: $!";
+    my $logPath = $CONFIG{$CK_LOG_PATH};
+    open FILE, $logPath or
+        die "Failed to open file $logPath: $!";
 
     my $lastProject;
     my $lastTimestamp;
